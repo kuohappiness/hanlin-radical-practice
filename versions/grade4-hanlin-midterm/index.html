@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>四上翰林版（期中）</title>
+    <link rel="stylesheet" href="styles.css?v=20261024-2" />
+  </head>
+  <body>
+    <a class="home-link" href="../../index.html">返回版本選擇</a>
+    <div class="game-shell">
+      <header class="topbar">
+        <div>
+          <h1>四上翰林版（期中）</h1>
+          <p>看玻璃罩裡的生字，在星星落地前選出正確部首。</p>
+        </div>
+        <div class="status-strip">
+          <span>第 <b id="levelNow">1</b> 關</span>
+          <span>本關 <b id="levelProgress">0</b> / <b id="levelTotal">0</b></span>
+          <span>答錯待複習 <b id="missCount">0</b></span>
+        </div>
+      </header>
+      <main class="sky">
+        <div class="star-field" aria-hidden="true"></div>
+        <section class="play-area" aria-label="部首選擇遊戲">
+          <div class="message hidden" id="message"></div>
+          <div class="fall-zone" id="fallZone"></div>
+          <div class="ground-line"></div>
+          <div class="word-dome">
+            <div class="dome-glow"></div>
+            <div class="target-label">這個字的部首是？</div>
+            <div class="target-word" id="targetWord">？</div>
+          </div>
+        </section>
+      </main>
+      <footer class="controlbar">
+        <button id="startButton" type="button">開始遊戲</button>
+        <button id="pauseButton" type="button">暫停</button>
+        <button id="restartButton" type="button">重新開始</button>
+        <span id="sourceNote"></span>
+      </footer>
+    </div>
+    <div class="level-overlay hidden" id="levelOverlay"><div class="big-like">讚</div></div>
+    <div class="final-overlay hidden" id="finalOverlay">
+      <div class="like-ring"><span>讚</span><span>讚</span><span>讚</span><span>讚</span><span>讚</span><span>讚</span></div>
+      <div class="gold-star">★</div>
+      <h2>全部過關</h2>
+    </div>
+    <script src="app.js?v=20261024-2"></script>
+  </body>
+</html>

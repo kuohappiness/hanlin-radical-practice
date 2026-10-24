@@ -1,0 +1,231 @@
+:root {
+  color-scheme: dark;
+  font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+  --ink: #f7fbff;
+  --muted: #b9c7df;
+  --cyan: #8ee8ff;
+  --gold: #ffd85a;
+  --panel: rgba(10, 22, 58, 0.74);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 18% 16%, rgba(114, 89, 255, 0.3), transparent 26rem),
+    radial-gradient(circle at 82% 20%, rgba(0, 190, 235, 0.22), transparent 25rem),
+    linear-gradient(180deg, #050d26 0%, #0b143c 58%, #151342 100%);
+}
+
+button {
+  font: inherit;
+}
+
+.star-field,
+.star-field::before,
+.star-field::after {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(142, 232, 255, 0.68) 0 1px, transparent 1.5px);
+  background-position: 0 0, 38px 72px;
+  background-size: 112px 112px, 176px 176px;
+  animation: twinkle 4.5s ease-in-out infinite alternate;
+}
+
+.star-field::before {
+  opacity: 0.42;
+  transform: rotate(8deg) scale(1.12);
+}
+
+.star-field::after {
+  opacity: 0.28;
+  transform: rotate(-7deg) scale(1.18);
+}
+
+.version-home {
+  position: relative;
+  z-index: 1;
+  width: min(68rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(2.5rem, 8vh, 6rem) 0 3rem;
+}
+
+.home-header {
+  margin-bottom: clamp(2rem, 6vh, 4rem);
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  color: var(--cyan);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow: 0 0 30px rgba(142, 232, 255, 0.55);
+}
+
+.subtitle {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.version-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.version-card {
+  position: relative;
+  display: grid;
+  min-height: 12rem;
+  padding: 1.35rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  text-align: left;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.version-card::after {
+  position: absolute;
+  right: 1rem;
+  bottom: -1.45rem;
+  color: rgba(255, 216, 90, 0.13);
+  content: "★";
+  font-size: 7.5rem;
+  line-height: 1;
+}
+
+.version-card:hover,
+.version-card:focus-visible {
+  border-color: rgba(142, 232, 255, 0.78);
+  background: rgba(17, 40, 85, 0.88);
+  outline: none;
+  transform: translateY(-4px);
+}
+
+.version-card.pending {
+  opacity: 0.72;
+}
+
+.grade-mark {
+  color: var(--gold);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 950;
+}
+
+.version-name {
+  align-self: end;
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  font-weight: 800;
+}
+
+.version-status {
+  z-index: 1;
+  align-self: end;
+  width: max-content;
+  margin-top: 0.65rem;
+  color: var(--cyan);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.pending .version-status {
+  color: var(--muted);
+}
+
+dialog {
+  width: min(26rem, calc(100% - 2rem));
+  padding: 1.5rem;
+  border: 1px solid rgba(142, 232, 255, 0.4);
+  border-radius: 8px;
+  background: #0d1940;
+  color: var(--ink);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  text-align: center;
+}
+
+dialog::backdrop {
+  background: rgba(2, 6, 22, 0.72);
+  backdrop-filter: blur(5px);
+}
+
+dialog h2 {
+  margin: 0.45rem 0 0.65rem;
+}
+
+dialog p {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.dialog-star {
+  color: var(--gold);
+  font-size: 3.5rem;
+  text-shadow: 0 0 22px rgba(255, 216, 90, 0.75);
+}
+
+#dialogClose {
+  min-width: 7rem;
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #64dcff, #a697ff);
+  color: #07122e;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.68; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 680px) {
+  .version-home {
+    padding-top: 2.25rem;
+  }
+
+  .version-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .version-card {
+    min-height: 9.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-field,
+  .star-field::before,
+  .star-field::after {
+    animation: none;
+  }
+
+  .version-card {
+    transition: none;
+  }
+}

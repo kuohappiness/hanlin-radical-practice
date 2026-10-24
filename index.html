@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>部首練習｜選擇版本</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="star-field" aria-hidden="true"></div>
+
+    <main class="version-home">
+      <header class="home-header">
+        <p class="eyebrow">翰林版國語</p>
+        <h1>部首練習</h1>
+        <p class="subtitle">選擇年級與考試範圍</p>
+      </header>
+
+      <section class="version-grid" aria-label="版本選擇">
+        <button class="version-card ready" type="button" data-href="versions/grade4-hanlin-midterm/index.html">
+          <span class="grade-mark">四上</span>
+          <span class="version-name">翰林版（期中）</span>
+          <span class="version-status">開始練習</span>
+        </button>
+
+        <button class="version-card pending" type="button" data-version="四上翰林版（期末）">
+          <span class="grade-mark">四上</span>
+          <span class="version-name">翰林版（期末）</span>
+          <span class="version-status">待匯入題庫</span>
+        </button>
+
+        <button class="version-card ready" type="button" data-href="versions/grade5-hanlin-midterm/index.html">
+          <span class="grade-mark">五上</span>
+          <span class="version-name">翰林版（期中）</span>
+          <span class="version-status">開始練習</span>
+        </button>
+
+        <button class="version-card pending" type="button" data-version="五上翰林版（期末）">
+          <span class="grade-mark">五上</span>
+          <span class="version-name">翰林版（期末）</span>
+          <span class="version-status">待匯入題庫</span>
+        </button>
+      </section>
+    </main>
+
+    <dialog id="pendingDialog">
+      <div class="dialog-star" aria-hidden="true">★</div>
+      <h2 id="dialogTitle">題庫尚未匯入</h2>
+      <p>這個版本的入口已建立，加入生字資料後就能開始遊戲。</p>
+      <button id="dialogClose" type="button">知道了</button>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
