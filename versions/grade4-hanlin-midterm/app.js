@@ -851,11 +851,11 @@ const els = {
   finalOverlay: document.querySelector("#finalOverlay"),
   sourceNote: document.querySelector("#sourceNote")
 };
-const state = { levelIndex: 0, pending: [], missed: [], current: null, running: false, paused: false, lock: false, timer: null, questionNumber: 0 };
+const state = { levelIndex: 0, pending: [], missed: [], current: null, running: false, paused: false, lock: false, timer: null, questionNumber: 0, nextOnResume: false };
 const sizes = ["small", "medium", "large", "wide"];
 function shuffle(items) { return [...items].sort(() => Math.random() - 0.5); }
 function resetGame() {
-  clearTimeout(state.timer); state.levelIndex = 0; state.running = false; state.paused = false; state.lock = false;
+  clearTimeout(state.timer); state.levelIndex = 0; state.running = false; state.paused = false; state.lock = false; state.nextOnResume = false;
   els.finalOverlay.classList.add("hidden"); els.levelOverlay.classList.add("hidden"); loadLevel(0);
   setMessage("按「開始遊戲」後，星星會從上方墜落。", false);
 }
@@ -864,16 +864,19 @@ function loadLevel(index) {
   els.levelNow.textContent = `${index + 1} / ${LEVELS.length}`; els.levelTotal.textContent = level.questions.length; updateStats(); clearStars(); els.targetWord.textContent = "？";
 }
 function startGame() {
-  if (state.running && state.paused) { state.paused = false; els.pauseButton.textContent = "暫停"; clearMessage(); nextQuestion(); return; }
+  if (state.running && state.paused) { pauseGame(); return; }
   if (!state.running) { state.running = true; state.paused = false; els.pauseButton.textContent = "暫停"; clearMessage(); nextQuestion(); }
 }
 function pauseGame() {
   if (!state.running) return; state.paused = !state.paused; els.pauseButton.textContent = state.paused ? "繼續" : "暫停";
   document.querySelectorAll(".falling-star").forEach(star => star.style.animationPlayState = state.paused ? "paused" : "running");
-  state.paused ? setMessage("已暫停", false) : clearMessage();
+  if (state.paused) setMessage("已暫停", false);
+  else { clearMessage(); if (state.nextOnResume) { state.nextOnResume = false; nextQuestion(); } }
 }
 function nextQuestion() {
-  if (!state.running || state.paused || state.lock) return; clearTimeout(state.timer); clearStars();
+  if (!state.running || state.lock) return;
+  if (state.paused) { state.nextOnResume = true; setMessage("已暫停", false); return; }
+  clearTimeout(state.timer); clearStars();
   if (state.pending.length === 0) {
     if (state.missed.length) { state.pending = shuffle(state.missed); state.missed = []; setMessage("錯題再挑戰", false); updateStats(); state.timer = setTimeout(nextQuestion, 900); return; }
     finishLevel(); return;
@@ -885,9 +888,9 @@ function spawnOptions(question) {
   const duration = Math.max(3.8, 9.2 - state.levelIndex * 0.65 - state.questionNumber * 0.08);
   answers.forEach((answer, index) => {
     const star = document.createElement("button"); star.type = "button"; star.className = `falling-star ${sizes[index]}`; star.textContent = answer.text;
-    star.style.left = `${9 + index * 23 + Math.random() * 7}%`; star.style.animationDuration = `${duration + Math.random() * 0.8}s`; star.style.animationDelay = `${Math.random() * 0.35}s`;
+    star.style.left = `clamp(calc(var(--w) / 2), ${12.5 + index * 25 + Math.random() * 4 - 2}%, calc(100% - var(--w) / 2))`; star.style.animationDuration = `${duration + Math.random() * 0.8}s`; star.style.animationDelay = `${Math.random() * 0.35}s`;
     star.addEventListener("click", () => chooseAnswer(answer, star));
-    star.addEventListener("animationend", () => { if (!state.lock && state.current === question) showWrong(star, true); });
+    star.addEventListener("animationend", () => { if (!state.lock && state.current === question) { explode(star); showWrong(null, true); } });
     els.fallZone.appendChild(star);
   });
 }
@@ -906,6 +909,15 @@ function showWrong(selectedStar, timedOut) {
   if (selectedStar) selectedStar.classList.add("wrong");
   setMessage(timedOut ? `時間到，正確部首是「${state.current.radical}」` : `正確部首是「${state.current.radical}」`, true);
   updateStats(); state.timer = setTimeout(() => { state.lock = false; clearMessage(); nextQuestion(); }, 3000);
+}
+function explode(star) {
+  const zone = els.fallZone.getBoundingClientRect(); const box = star.getBoundingClientRect();
+  const blast = document.createElement("div"); blast.className = "explosion";
+  blast.style.left = `${box.left + box.width / 2 - zone.left}px`; blast.style.top = `${zone.height}px`;
+  blast.innerHTML = `<span class="blast"></span><span class="shockwave"></span>` + Array.from({ length: 12 }, (_, i) => `<span class="spark" style="--angle:${i * 30}deg"></span>`).join("");
+  if (star.textContent !== state.current.radical) star.classList.add("exploded");
+  els.fallZone.appendChild(blast);
+  const area = els.fallZone.parentElement; area.classList.remove("shake"); void area.offsetWidth; area.classList.add("shake");
 }
 function finishLevel() {
   state.running = false; state.lock = true; clearStars(); els.levelOverlay.classList.remove("hidden");

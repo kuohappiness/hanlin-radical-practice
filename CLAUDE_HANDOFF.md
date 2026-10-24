@@ -32,10 +32,11 @@
 ## 4. 不可破壞的遊戲規則
 
 1. 背景為星空，目標生字放在畫面底部的玻璃罩內。
-2. 每題同時出現四顆不同大小的墜落星星，星星內顯示部首。
+2. 每題同時出現四顆不同大小的墜落星星，星星內顯示部首。星星尺寸已於 2026-10-24 放大 20%（桌面 6.36／7.44／8.64／8.16rem，手機 `min(5.76rem, 24vw)`），分四條跑道並限制在畫面內。
 3. 初始速度較慢，並依關卡與題數逐漸加快。
 4. 答對後立刻進入下一題，該字本關不再出現。
 5. 答錯或逾時時，錯誤選項消失，正確星星放大並停格三秒；錯題稍後重複，直到答對。
+   逾時是指第一顆星星碰到地面線：該星星在地面爆炸（閃光、衝擊波、火花、畫面輕微震動），逾時不把任何星星標成紅色。
 6. 每關全部答對後顯示大型「讚」動畫。
 7. 六關完成後，六個「讚」繞圈旋轉兩圈，再顯示大型金色星星。
 8. 每個遊戲頁必須保留「返回版本選擇」連結。
@@ -74,11 +75,11 @@ Pop-Location
 python tools/build_single_game.py source-data/dingding_radical_game_data.json --out versions/grade5-hanlin-midterm
 ```
 
-注意：`build_single_game.py` 會重寫遊戲的 `index.html` 與 `styles.css`。重新產生後必須檢查並補回：
+注意：`build_single_game.py` 會重寫遊戲的 `index.html`、`styles.css` 與 `app.js`。產生器已內建「返回版本選擇」連結與其版面，重新產生後只需：
 
-- `返回版本選擇`，連結為 `../../index.html`。
-- CSS/JS 快取版本碼，例如 `styles.css?v=YYYYMMDD-N` 與 `app.js?v=YYYYMMDD-N`。
-- 手機與桌面版畫面沒有重疊。
+- 補回 CSS/JS 快取版本碼，例如 `styles.css?v=YYYYMMDD-N` 與 `app.js?v=YYYYMMDD-N`；每次修改都要遞增，學生裝置才會載入新版。
+- 五上期中的 `<title>` 原為「五上翰林版（期中）｜部首練習」，可視需要補回。
+- 確認手機與桌面版畫面沒有重疊。
 
 ## 7. 每次修改後必做檢查
 
@@ -95,17 +96,36 @@ node server.js
 2. 兩張「待匯入題庫」卡片會開啟提示對話框。
 3. 每個遊戲能開始，畫面同時只有四顆星星。
 4. 正確部首只出現一次，四個選項互不重複。
-5. 答錯停格、錯題重複、過關「讚」與最終金色星星均正常。
-6. 「返回版本選擇」可回首頁。
+5. 答錯停格、逾時落地爆炸、錯題重複、過關「讚」與最終金色星星均正常。
+6. 答案停格時按「暫停」再「繼續」，遊戲能接著出題；暫停中按「開始遊戲」不會跳過目前題目。
+7. 「返回版本選擇」可回首頁。
 
 ## 8. GitHub Pages 部署方式
 
-此 repo 的 `main` 分支根目錄就是網站根目錄。修改完成後：
+- Repo：https://github.com/kuohappiness/hanlin-radical-practice
+- 網站：https://kuohappiness.github.io/hanlin-radical-practice/
+- 免費帳號的 GitHub Pages 只能用在公開 repo；repo 建立時先設為私人，內容檢查後再改為公開。
 
-```powershell
+此 repo 的 `main` 分支根目錄就是網站根目錄。
+
+本機資料夾的 `.git` 由 Codex 沙盒帳號建立，Windows 使用者 lenovo 需先執行一次（已執行過可略過）：
+
+```bat
+git config --global --add safe.directory "%cd:\=/%"
+```
+
+本機 repo 沒有設定 `origin`。雲端 Claude 可能已在 GitHub 上修改過，本機修改前先拉回：
+
+```bat
+git pull https://github.com/kuohappiness/hanlin-radical-practice.git main
+```
+
+修改完成後：
+
+```bat
 git add .
 git commit -m "Update radical practice game"
-git push origin main
+git push https://github.com/kuohappiness/hanlin-radical-practice.git HEAD:main
 ```
 
 GitHub Pages 設定應使用：

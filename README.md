@@ -11,7 +11,9 @@
 
 ## 線上遊戲
 
-GitHub Pages 網址會在首次部署完成後補上。
+https://kuohappiness.github.io/hanlin-radical-practice/
+
+手機、平板與其他電腦都可直接開啟。
 
 ## 本機預覽
 
